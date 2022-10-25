@@ -1,16 +1,18 @@
-const pkmName = document.querySelector(".pkm-name");
-const pkmNum = document.querySelector(".pkm-num");
-const pkmImg = document.querySelector(".pkm-img");
+const pokemonName = document.querySelector(".pokemon__name");
+const pokemonNumber = document.querySelector(".pokemon__number");
+const pokemonImage = document.querySelector(".pokemon__image");
 
 const form = document.querySelector(".form");
-const input = document.querySelector(".input-search");
-const btnPrev = document.querySelector(".btn-prev");
-const btnNext = document.querySelector(".btn-next");
+const input = document.querySelector(".input__search");
+const buttonPrev = document.querySelector(".btn-prev");
+const buttonNext = document.querySelector(".btn-next");
 
-let searchPkm = 25;
+let searchPokemon = 1;
 
-const fetchPkm = async (pkm) => {
-  const APIResponse = await fetch(`http://pokeapi.co/api/v2/pokemon/${pkm}`);
+const fetchPokemon = async (pokemon) => {
+  const APIResponse = await fetch(
+    `https://pokeapi.co/api/v2/pokemon/${pokemon}`
+  );
 
   if (APIResponse.status === 200) {
     const data = await APIResponse.json();
@@ -18,44 +20,44 @@ const fetchPkm = async (pkm) => {
   }
 };
 
-const renderPkm = async (pkm) => {
-  pkmName.innerHTML = "Loading...";
-  pkmNum.innerHTML = "";
+const renderPokemon = async (pokemon) => {
+  pokemonName.innerHTML = "Loading...";
+  pokemonNumber.innerHTML = "";
 
-  const data = await fetchPkm(pkm);
+  const data = await fetchPokemon(pokemon);
 
   if (data) {
-    pkmImg.style.display = "block";
-    pkmName.innerHTML = data.name;
-    pkmNum.innerHTML = data.id;
-    pkmImg.src =
+    pokemonImage.style.display = "block";
+    pokemonName.innerHTML = data.name;
+    pokemonNumber.innerHTML = data.id;
+    pokemonImage.src =
       data["sprites"]["versions"]["generation-v"]["black-white"]["animated"][
         "front_default"
       ];
     input.value = "";
-    searchPkm = data.id;
+    searchPokemon = data.id;
   } else {
-    pkmImg.style.display = "none";
-    pkmName.innerHTML = "Not Found ";
-    pkmNum.innerHTML = "";
+    pokemonImage.style.display = "none";
+    pokemonName.innerHTML = "Not found :c";
+    pokemonNumber.innerHTML = "";
   }
 };
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  renderPkm(input.value.toLowerCase());
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  renderPokemon(input.value.toLowerCase());
 });
 
-btnPrev.addEventListener("click", () => {
-  if (searchPkm > 1) {
-    searchPkm -= 1;
-    renderPkm(searchPkm);
+buttonPrev.addEventListener("click", () => {
+  if (searchPokemon > 1) {
+    searchPokemon -= 1;
+    renderPokemon(searchPokemon);
   }
 });
 
-btnNext.addEventListener("click", () => {
-  searchPkm += 1;
-  renderPkm(searchPkm);
+buttonNext.addEventListener("click", () => {
+  searchPokemon += 1;
+  renderPokemon(searchPokemon);
 });
 
-renderPkm(searchPkm);
+renderPokemon(searchPokemon);
